@@ -22,7 +22,14 @@
 
         <script 
             defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD91QG5EhLEDzwRsBj0oVdKoAAj3Cr7fmM&callback=initMap">
-        </script>
+		</script>
+		
+		<script>
+			function reloadThePage()
+			{
+				location.reload();
+			}
+		</script>
 
 
 	</head>
@@ -33,40 +40,46 @@
 		
         	<div id="header" class="container">
             
-            	<div id="logo">
-                    
-                    <h1><a href="#">Ballot Box Locator</a></h1>
-                </div>
+            	<div id="logo">  
+                    <h1><a href="" onclick="reloadThePage()">Ballot Box Locator</a></h1>
+				</div>
+				
                 <nav id="nav">
                     <ul>
-                        <!--<li class="current_page_item"><a href="index.html">Homepage</a></li>
-                        <li><a href="twocolumn1.html">Right Sidebar</a></li>
-                        <li><a href="twocolumn2.html">Left Sidebar</a></li>
-                        <li><a href="onecolumn.html">No Sidebar</a></li>-->
+                        <li class="current_page_item"><a href="" onClick="reloadThePage()">Home</a></li>
+                        <li><a href="">Ballot Information</a></li>
+                        <li><a href="">Our Mission</a></li>
+                        <li><a href="">Contact</a></li>
                     </ul>
                 </nav>
-                
             </div>
 			
 			<div id="banner">
-				<div class="container">
-					<div class="row">
-						<section class="12u">
-							<header>
-								<h2>Find Your Nearest Ballot Drop Box</h2>
-							</header>
-                                <div class="wrapper">
-                                    <input type="text" class="input" placeholder="Type In Your Address">
-                                    <div class="searchbtn">
-                                        <i class="fas fa-search"></i>
-                                     </div>  
-                                </div>
-						</section>
-					</div>
+
+				<h2>Find Your Nearest Ballot Drop Box</h2>
+
+                <div class="wrapper">
+					<form class="contact-form" id="contact-form" action="" method="post" >
+						<div class="form-group">
+							<input type="text" class="form-control" id= "cstname" name="cstname" placeholder="State">	
+						</div>
+						<div class="form-group">
+							<input type="number" class="form-control" id="cstphone" name="cstphone" placeholder="City">	
+						</div>
+						<div class="form-group">
+							<input type="email" class="form-control" id="cstemail" name="cstemail" placeholder="Street">	
+						</div>
+						<div class="form-group">
+							<input class="form-control" id="cstmessage" name="cstmessage" placeholder="House Number"></input>	
+						</div>
+					</form>
+			
+					<div class="searchbtn">
+						<i class="fas fa-search"></i>
+					</div>  
+			
 				</div>
-
 			</div>			
-
 		</div>
 		<!-- Header Ends Here -->
 
