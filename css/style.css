@@ -7,14 +7,13 @@
     Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
 */
 
-#mapwrapper{
+.mapwrapper{
         margin-left: 20%;
-        margin-right: 20%;
+		margin-right: 20%;
 }
 
-#map {
-  height: 40%;
-  display: flex;
+.map {
+  height: 400px;
 }
 
 .wrapper{

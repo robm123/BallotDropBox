@@ -71,68 +71,66 @@
 		<!-- Header Ends Here -->
 
 
-
-
-
-
 		<!-- Featured Area google map api here??-->
-			<div id="featured-wrapper">
+		<div id="featured-wrapper">
 
-		<div id="mapwrapper">
-        	<h5>Test Map Google API</h5>
-        	<div id="map"></div>
-	        <script>
-	            let map;
-	            
-	            function initMap() {
-	              map = new google.maps.Map(document.getElementById("map"), {
-	                center: { lat: -34.397, lng: 150.644 },
-	                zoom: 8,
-	              });
-	            }
-	        </script>
-    	</div>
-
-				<div class="container">
-					<div class="row double">
+			<div id="mapwrapper" class="mapwrapper">
+				<h5>Test Map Google API</h5>
+				<div id="map" class="map"></div>
+				<script>
+					let map;
 					
-                        <section class="4u">
-                           <header>
-	                           <h2>Maecenas luctus lectus</h2>
-                           </header>
-                            <span class="pennant"><span class="fa fa-apple"></span></span>
-                            <p>Curabitur sit amet nulla. Nam in massa. Sed vel tellus. Curabitur sem urna, consequat vel, suscipit in, mattis placerat, nulla. Sed ac leo.</p>
-                            <a href="#" class="button button-style1">Read More</a>
-                        </section>
-                        <section class="4u">
-                            <header>
-	                            <h2>Etiam rhoncus volutpat</h2>
-                            </header>
-                            <span class="pennant"><span class="fa fa-rocket"></span></span>
-                            <p>Donec ornare neque ac sem. Mauris aliquet. Aliquam sem leo, vulputate sed, convallis at, ultricies quis, justo. Donec nonummy magna.</p>
-                            <a href="#" class="button button-style1">Read More</a>
-                        </section>
-                        <section class="4u">
-                            <header>
-	                            <h2>Mauris vulputate dolor</h2>
-                            </header>
-                            <span class="pennant"><span class="fa fa-cogs"></span></span>
-                            <p>Curabitur sit amet nulla. Nam in massa. Sed vel tellus. Curabitur sem urna, consequat vel, suscipit in, mattis placerat, nulla. Sed ac leo.</p>
-                            <a href="#" class="button button-style1">Read More</a>
-                        </section>
-					
-					</div>
-				</div>
-				
+					function initMap() {
+					map = new google.maps.Map(document.getElementById("map"), {
+						center: { lat: -34.397, lng: 150.644 },
+						zoom: 8,
+						});
+					}
+				</script>
 			</div>
+
+			<div class="container">
+				<div class="row double">
+						
+					<section class="4u">
+						<header>
+							<h2>Maecenas luctus lectus</h2>
+						</header>
+						<span class="pennant"><span class="fa fa-apple"></span></span>
+						<p>Curabitur sit amet nulla. Nam in massa. Sed vel tellus. Curabitur sem urna, consequat vel, suscipit in, mattis placerat, nulla. Sed ac leo.</p>
+						<a href="#" class="button button-style1">Read More</a>
+					</section>
+
+					<section class="4u">
+						<header>
+							<h2>Etiam rhoncus volutpat</h2>
+						</header>
+						<span class="pennant"><span class="fa fa-rocket"></span></span>
+						<p>Donec ornare neque ac sem. Mauris aliquet. Aliquam sem leo, vulputate sed, convallis at, ultricies quis, justo. Donec nonummy magna.</p>
+						<a href="#" class="button button-style1">Read More</a>
+					</section>
+
+					<section class="4u">
+						<header>
+							<h2>Mauris vulputate dolor</h2>
+						</header>
+						<span class="pennant"><span class="fa fa-cogs"></span></span>
+						<p>Curabitur sit amet nulla. Nam in massa. Sed vel tellus. Curabitur sem urna, consequat vel, suscipit in, mattis placerat, nulla. Sed ac leo.</p>
+						<a href="#" class="button button-style1">Read More</a>
+					</section>
+						
+				</div>
+			</div>
+				
+		</div>
 		
 		
 		<!-- Featured Ends Here -->
 
 		<!-- Copyright -->
-            <div id="copyright" class="container">
-                Designed and Developed by Roberto Merino
-            </div>
+        <div id="copyright" class="container">
+             Designed and Developed by Roberto Merino
+        </div>
 
 
 	</body>
