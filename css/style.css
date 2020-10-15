@@ -23,11 +23,6 @@ html {
   scroll-behavior: smooth;
 }
 
-
-.mapwrapper{
-
-}
-
 .map {
   height: 500px;
   width: 100%;
