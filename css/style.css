@@ -18,9 +18,9 @@
 
 .wrapper{
 	position: absolute;
-	top:  0%;
-	left: 20%;
-	transform: translate(50%,50%);
+	top:  80%;
+	left: 50%;
+	transform: translate(-50%,-50%);
 	background: rgba(0, 0, 0, .6);
 	max-width: 550px;
 	width: 100%;
@@ -30,7 +30,7 @@
 	justify-content: space-between;
 }
 
-.wrapper .form-group{
+.wrapper .controls{
 	width: 85%;
 	padding: 15px 20px;
 	border:none;
@@ -42,7 +42,7 @@
 
 .searchbtn{
 	background: #167CB2;
-	width: 50%;
+	width: 10%;
 	border-radius: 5px;
 	position: relative;
 	cursor: pointer;
@@ -55,6 +55,7 @@
 	left: 50%;
 	transform: translate(-50%,-50%);
 	font-size: 18px;
+	color: #FFF;
 }
 
 
@@ -81,11 +82,12 @@ h1, h2, h3 {
 	color: #CFCFCF;
 }
 
+/*changes "find your nearest ballot drop box" style */
 #banner h2
 {
 	letter-spacing: -1px;
-	font-size: 6.00em;
-	margin-top: 300px;
+	font-size: 5.00em;
+	margin-top: 100px;
 }
 
 h2
