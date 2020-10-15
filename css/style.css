@@ -7,13 +7,30 @@
     Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
 */
 
+#pac-input {
+	/*
+  background-color: #fff;
+  font-family: Roboto;
+  font-size: 15px;
+  font-weight: 300;
+  margin-left: 12px;
+  padding: 0 11px 0 13px;
+  text-overflow: ellipsis;
+  width: 400px;*/
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+
 .mapwrapper{
-        margin-left: 20%;
-		margin-right: 20%;
+
 }
 
 .map {
-  height: 400px;
+  height: 500px;
+  width: 100%;
 }
 
 .wrapper{
@@ -47,6 +64,7 @@
 	position: relative;
 	cursor: pointer;
 
+
 }
 
 .searchbtn .fas{
@@ -79,7 +97,7 @@ h1, h2, h3 {
 	margin: 0;
 	padding: 0;
 	font-weight: 300;
-	color: #CFCFCF;
+	color: #FFF;   	/*color: #CFCFCF; chnaged fonts color*/
 }
 
 /*changes "find your nearest ballot drop box" style */
@@ -203,7 +221,7 @@ a:hover
 	#featured-wrapper
 	{
 		position: relative;
-		padding: 3em 0em;
+		padding: 0em 0em;
 		background: #0c0e0f;
 		text-align: center;
 

@@ -20,9 +20,14 @@
 		</noscript>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+        <!-- google map api-->
         <script 
             defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD91QG5EhLEDzwRsBj0oVdKoAAj3Cr7fmM&callback=initMap">
 		</script>
+
+		<!-- both scripts below used for search box. find out what the first one does-->
+    	<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD91QG5EhLEDzwRsBj0oVdKoAAj3Cr7fmM&callback=initAutocomplete&libraries=places&v=weekly"defer></script>
 		
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
 		<script>
@@ -62,6 +67,72 @@
 			}
 		</script>
 
+		<!-- Search bar function -->
+	    <script>
+	      function initAutocomplete() {
+	        const map = new google.maps.Map(document.getElementById("map"), {
+	          center: { lat: 38.916691, lng: -77.035373 }, 
+	          zoom: 9,
+	          mapTypeId: "roadmap",
+	        });
+	        // Create the search box and link it to the UI element.
+	        const input = document.getElementById("pac-input");
+	        const searchBox = new google.maps.places.SearchBox(input);
+	        //map.controls[google.maps.ControlPosition.TOP_LEFT].push(input); <!-- took this out for placement--> 
+	        // Bias the SearchBox results towards current map's viewport.
+	        map.addListener("bounds_changed", () => {
+	          searchBox.setBounds(map.getBounds());
+	        });
+	        let markers = [];
+	        // Listen for the event fired when the user selects a prediction and retrieve
+	        // more details for that place.
+	        searchBox.addListener("places_changed", () => {
+	          const places = searchBox.getPlaces();
+
+	          if (places.length == 0) {
+	            return;
+	          }
+	          // Clear out the old markers.
+	          markers.forEach((marker) => {
+	            marker.setMap(null);
+	          });
+	          markers = [];
+	          // For each place, get the icon, name and location.
+	          const bounds = new google.maps.LatLngBounds();
+	          places.forEach((place) => {
+	            if (!place.geometry) {
+	              console.log("Returned place contains no geometry");
+	              return;
+	            }
+	            const icon = {
+	              url: place.icon,
+	              size: new google.maps.Size(71, 71),
+	              origin: new google.maps.Point(0, 0),
+	              anchor: new google.maps.Point(17, 34),
+	              scaledSize: new google.maps.Size(25, 25),
+	            };
+	            // Create a marker for each place.
+	            markers.push(
+	              new google.maps.Marker({
+	                map,
+	                icon,
+	                title: place.name,
+	                position: place.geometry.location,
+	              })
+	            );
+
+	            if (place.geometry.viewport) {
+	              // Only geocodes have viewport.
+	              bounds.union(place.geometry.viewport);
+	            } else {
+	              bounds.extend(place.geometry.location);
+	            }
+	          });
+	          map.fitBounds(bounds);
+	        });
+	      }
+	    </script>
+
 		<!-- new comment for commit 12:04am-->
 	</head>
 	<body class="homepage">
@@ -95,7 +166,9 @@
                                 <div class="wrapper">
                                     <input id="pac-input" type="text" class="controls" placeholder="Type In Your Address">
                                     <div class="searchbtn">
+                                    	
                                         <i class="fas fa-search"></i>
+                                    	
                                      </div>  
                                 </div>
 						</section>
@@ -106,11 +179,9 @@
 		<!-- Header Ends Here -->
 
 
-		<!-- Featured Area google map api here??-->
+		<!-- Google Map-->
 		<div id="featured-wrapper">
-
 			<div id="mapwrapper" class="mapwrapper">
-				<h5>Test Map Google API</h5>
 				<div id="map" class="map"></div>
 			</div>
 				
