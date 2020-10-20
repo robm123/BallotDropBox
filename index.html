@@ -3,13 +3,13 @@
 <html>
 	<head>
 		<title>Ballot Box Locator</title>
-        <link rel="icon" href="images/favicon.ico">
+    <link rel="icon" href="images/favicon.ico">
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="description" content="" />
 		<meta name="keywords" content="" />
 		<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800" rel="stylesheet" type="text/css" />
 		<!--[if lte IE 8]><script src="js/html5shiv.js"></script><![endif]-->
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 		<script src="js/skel.min.js"></script>
 		<script src="js/skel-panels.min.js"></script>
 		<script src="js/init.js"></script>
@@ -18,115 +18,33 @@
 			<link rel="stylesheet" href="css/style.css" />
 			<link rel="stylesheet" href="css/style-desktop.css" />
 		</noscript>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-        <!-- google map api-->
-        <script 
-            defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD91QG5EhLEDzwRsBj0oVdKoAAj3Cr7fmM&callback=initMap">
-		</script>
-
-		<!-- both scripts below used for search box. find out what the first one does-->
-    	<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-    	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD91QG5EhLEDzwRsBj0oVdKoAAj3Cr7fmM&callback=initAutocomplete&libraries=places&v=weekly"defer></script>
-		
-		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
-
-		<script>
-			function reloadThePage()
-			{
-				location.reload();
-			}
-		</script>
-
-		<!-- Search bar function -->
-	    <script>
-	      function initAutocomplete() {
-	        const map = new google.maps.Map(document.getElementById("map"), {
-	          center: { lat: 38.916691, lng: -77.035373 }, 
-	          zoom: 9,
-	          mapTypeId: "roadmap",
-	        });
-	        // Create the search box and link it to the UI element.
-	        const input = document.getElementById("pac-input");
-	        const searchBox = new google.maps.places.SearchBox(input);
-	        //map.controls[google.maps.ControlPosition.TOP_LEFT].push(input); <!-- took this out for placement--> 
-	        // Bias the SearchBox results towards current map's viewport.
-	        map.addListener("bounds_changed", () => {
-	          searchBox.setBounds(map.getBounds());
-	        });
-	        let markers = [];
-	        // Listen for the event fired when the user selects a prediction and retrieve
-	        // more details for that place.
-	        searchBox.addListener("places_changed", () => {
-	          const places = searchBox.getPlaces();
-
-	          if (places.length == 0) {
-	            return;
-	          }
-	          // Clear out the old markers.
-	          markers.forEach((marker) => {
-	            marker.setMap(null);
-	          });
-	          markers = [];
-	          // For each place, get the icon, name and location.
-	          const bounds = new google.maps.LatLngBounds();
-	          places.forEach((place) => {
-	            if (!place.geometry) {
-	              console.log("Returned place contains no geometry");
-	              return;
-	            }
-	            const icon = {
-	              url: place.icon,
-	              size: new google.maps.Size(71, 71),
-	              origin: new google.maps.Point(0, 0),
-	              anchor: new google.maps.Point(17, 34),
-	              scaledSize: new google.maps.Size(25, 25),
-	            };
-	            // Create a marker for each place.
-	            markers.push(
-	              new google.maps.Marker({
-	                map,
-	                icon,
-	                title: place.name,
-	                position: place.geometry.location,
-	              })
-	            );
-
-	            if (place.geometry.viewport) {
-	              // Only geocodes have viewport.
-	              bounds.union(place.geometry.viewport);
-	            } else {
-	              bounds.extend(place.geometry.location);
-	            }
-	          });
-	          map.fitBounds(bounds);
-	        });
-	      }
-	    </script>
-
-		<!-- new comment for commit 12:04am-->
+ 
+ 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<!-- taking out async defer stops it from crashing..not sure why-->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAl7ZldzhZeDOnPjJEIPlevPebXJOd0DRA&callback=initAutocomplete&libraries=places&v=weekly"defer></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+		<script type="text/javascript" src="main.js"></script>
 	</head>
-	<body class="homepage">
 
+	<body class="homepage">
 		<!-- Header -->
 		<div id="header-wrapper">
-		
-        	<div id="header" class="container">
-            
-            	<div id="logo">  
-                    <h1><a href="" onclick="reloadThePage()">Ballot Box Locator</a></h1>
+			<!-- navbar -->
+	  	<div id="header" class="container">
+	    	<div id="logo">  
+	            <h1><a href="" onclick="reloadThePage()">Ballot Box Locator</a></h1>
 				</div>
-				
-                <nav id="nav">
-                    <ul>
-                        <li class="current_page_item"><a href="" onClick="reloadThePage()">Home</a></li>
-                        <li><a href="">Ballot Information</a></li>
-                        <li><a href="">Our Mission</a></li>
-                        <li><a href="">Contact</a></li>
-                    </ul>
-                </nav>
-            </div>
-			
+        <nav id="nav">
+            <ul>
+	            <li class="current_page_item"><a href="" onClick="reloadThePage()">Home</a></li>
+	            <li><a href="">Ballot Information</a></li>
+	            <li><a href="">Our Mission</a></li>
+	            <li><a href="">Contact</a></li>
+            </ul>
+        </nav>
+	    </div>
+	    <!-- Banner -->
 			<div id="banner">
 				<div class="container">
 					<div class="row">
@@ -134,38 +52,32 @@
 							<header>
 								<h2>Find Your Nearest Ballot Drop Box</h2>
 							</header>
-                                <div class="wrapper">
-                                    <input id="pac-input" type="text" class="controls" placeholder="Type In Your Address">
-                                    <div class="searchbtn">
-                                    	
-                                        <i class="fas fa-search"></i>
-                                    	
-                                     </div>  
-                                </div>
+	              <div class="wrapper">
+	              	<input id="pac-input" type="text" class="controls" placeholder="Type In Your Address">
+	                <div class="searchbtn">
+	                	<i class="fas fa-search"></i>
+	                </div>  
+	              </div>
+	              
+	              <div id="infowindow-content">
+						      <!--<img src="" id="place-icon"/>-->
+						      <!--<span id="place-name" class="title"></span><br />-->
+						      <span id="place-address"></span>
+					    	</div>
 						</section>
 					</div>
 				</div>
-			</div>			
+			</div>				
 		</div>
-		<!-- Header Ends Here -->
-
-
 		<!-- Google Map-->
 		<div id="featured-wrapper">
 			<div id="mapwrapper" class="mapwrapper">
 				<div id="map" class="map"></div>
 			</div>
-				
 		</div>
-		
-		
-		<!-- Featured Ends Here -->
-
 		<!-- Copyright -->
-        <div id="copyright" class="container">
-             Designed and Developed by Roberto Merino & Razeno Khan
-        </div>
-
-
+    <div id="copyright" class="container">
+         Designed and Developed by Roberto Merino & Razeno Khan
+    </div>
 	</body>
 </html>

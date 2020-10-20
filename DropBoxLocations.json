@@ -1,0 +1,57 @@
+{
+    "DropBoxes": [{
+        "title": "Carteret",
+        "county": "Middlesex. County",
+        "location": "Thomas Deverin Community Center",
+        "description": "Inside the vestibule of the building",
+        "address": "100 Cooke Avenue Carteret 07008 ",
+        "lat": 40.578993,
+        "lng": -74.219128
+      },
+      {
+        "title": "Cranbury",
+        "county": "Middlesex County",
+        "location": "Cranbury Police Department",
+        "description": "In front of police station ",
+        "address": "1 Logan Drive Cranbury 08512 ",
+        "lat": 40.3065834,
+        "lng": -74.5031231
+      },
+      {
+        "title": "Dunellen",
+        "county": "Middlesex County",
+        "location": "Dunellen Public Library",
+        "description": "On sidewalk near entrance to library",
+        "address": "100 New Market Road Dunellen 08812 ",
+        "lat": 40.5902653,
+        "lng": -74.4646026
+      },
+      {
+        "title": "East Brunswick",
+        "county": "Middlesex County",
+        "location": "East Brunswick Municipal Complex",
+        "description": "Drop box located between parking lot and Complex Building; by police the entrance",
+        "address": "1 Civic Drive East Brunswick 08816",
+        "lat": 40.4169861,
+        "lng": -74.4203437
+      },
+      {
+        "title": "Edison",
+        "county": "Middlesex County",
+        "location": "Edison Municipal Complex",
+        "description": "Drop Box located outside Municipal Complex entrance under awning",
+        "address": "100 Municipal Boulevard Edison 08817",
+        "lat": 40.5272836,
+        "lng": -74.3947291
+      },
+      {
+        "title": "Edison",
+        "county": "Middlesex County",
+        "location": "North Edison Library",
+        "description": "Drop box located in front of library. ",
+        "address": "777 Grove Ave, Edison 08820",
+        "lat": 40.575648,
+        "lng": -74.358965
+      }                 
+    ]
+  }
