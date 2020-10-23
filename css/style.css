@@ -25,7 +25,13 @@ html {
 
 .map {
   height: 500px;
-  width: 100%;
+  width: 80%;
+  float: left;
+}
+
+.location_list{
+	width: 20%;
+	float: right;
 }
 
 .wrapper{
