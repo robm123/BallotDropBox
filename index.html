@@ -24,6 +24,7 @@
 		<!-- taking out async defer stops it from crashing..not sure why-->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAl7ZldzhZeDOnPjJEIPlevPebXJOd0DRA&callback=initAutocomplete&libraries=places&v=weekly"defer></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script src="https://apis.google.com/js/client.js?onload=load" async defer></script>
 		<script type="text/javascript" src="main.js"></script>
 	</head>
 
@@ -58,7 +59,7 @@
 	                	<i class="fas fa-search"></i>
 	                </div>  
 	              </div>
-	              
+
 	              <div id="infowindow-content">
 						      <!--<img src="" id="place-icon"/>-->
 						      <!--<span id="place-name" class="title"></span><br />-->
@@ -72,15 +73,12 @@
 		<!-- Google Map-->
 		<div id="featured-wrapper">
 			<div id="mapwrapper" class="mapwrapper">
-				<div class="location_list">List Of Locations</div>
 				<div id="map" class="map"></div>
-				
 			</div>
-			
 		</div>
 		<!-- Copyright -->
     <div id="copyright" class="container">
-        Designed and Developed by Roberto Merino & Razeno Khan
+         Designed and Developed by Roberto Merino & Razeno Khan
     </div>
 	</body>
 </html>

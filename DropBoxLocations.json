@@ -52,6 +52,263 @@
         "address": "777 Grove Ave, Edison 08820",
         "lat": 40.575648,
         "lng": -74.358965
-      }                 
+      },
+      {
+        "title": "Edison",
+        "county": "Middlesex County",
+        "location": "Middlesex County College - College Center",
+        "description": "Drop box located by the flag pole.",
+        "address": "2600 Woodbridge Avenue, Edison 08818",
+        "lat": 40.505103, 
+        "lng": 74.367195        
+      },
+      {
+        "title": "Helmetta",
+        "county": "Middlesex County",
+        "location": " Helmetta Borough Hall",
+        "description": "In front of borough hall ",
+        "address": "51 Main Street Helmetta 08828",
+        "lat": 40.378626, 
+        "lng": -74.418340   
+      },
+      {
+        "title": "Highland Park",
+        "county": "Middlesex County",
+        "location": "Highland Park Borough Hall ",
+        "description": "In front of borough hall",
+        "address": "221 South Fifth Avenue Highland Park 08894",
+        "lat": 40.497318,
+        "lng": -74.422322 
+      },
+      {
+        "title": "Jamesburg",
+        "county": "Middlesex County",
+        "location": "Jamesburg Municipal Complex",
+        "description": "Drop box located within the parking lot, in the Safe Zone",
+        "address": "131 Perrineville Road Jamesburg 08831",
+        "lat": 40.345580, 
+        "lng": -74.438998  
+      },
+      {
+        "title": "Metuchen",
+        "county": "Middlesex County",
+        "location": "Metuchen Municipal Complex",
+        "description": "Drop box located in back of parking lot",
+        "address": "500 Main Street Metuchen 08840",
+        "lat": 40.544431, 
+        "lng": -74.362268  
+      },
+      {
+        "title": "Middlesex Borough",
+        "county": "Middlesex County",
+        "location": "Middlesex Borough Hall",
+        "description": "In the rear of townhall",
+        "address": "1200 Mountain Avenue Middlesex Borough 08846",
+        "lat": 40.578473, 
+        "lng": -74.499030  
+      },
+      {
+        "title": "Milltown",
+        "county": "Middlesex County",
+        "location": "Milltown Municipal Complex",
+        "description": "Drop box located at beginning of side entrance accessible from the parking lot, Slated as Safe Exchange Zone",
+        "address": "39 Washington Avenue Milltown 08850",
+        "lat": 40.452633,
+        "lng": -74.435471
+      },
+      {
+        "title": "Monroe",
+        "county": "Middlesex County",
+        "location": "Monroe Township Library",
+        "description": "Right of the entrance to the library",
+        "address": "4 Municipal Plaza Monroe 08831",
+        "lat": 40.327110, 
+        "lng": -74.442520
+      },
+      {
+        "title": "New Brunswick",
+        "county": "Middlesex County",
+        "location": "County Administration Building",
+        "description": "Drop box located in front of Bayard Street front entrance.",
+        "address": "75 Bayard Street New Brunswick 08901",
+        "lat": 40.494166, 
+        "lng": -74.446006  
+      },
+      {
+        "title": "New Brunswick",
+        "county": "Middlesex County",
+        "location": "The Yard at Rutgers University",
+        "description": "To the right of the bus stop ny the street",
+        "address": "40 College Ave, New Brunswick 08901",
+        "lat":  40.499642,  
+        "lng":  -74.448377 
+      },
+      {
+        "title": "North Brunswick",
+        "county": "Middlesex County",
+        "location": "North Brunswick Township Hall",
+        "description": "In front of townhall",
+        "address": "710 Hermann Road North Brunswick 08902",
+        "lat": 40.466800,
+        "lng": -74.457855  
+      },
+      {
+        "title": "Old Bridge",
+        "county": "Middlesex County",
+        "location": "Old Bridge Township Municipal Complex",
+        "description": "On the sidewalk nearest the curb in front of municipal building",
+        "address": "1 Old Bridge Plaza Old Bridge 08857",
+        "lat": 40.404034, 
+        "lng": -74.297863   
+      },
+      {
+        "title": "Perth Amboy",
+        "county": "Middlesex County",
+        "location": "Perth Amboy Public Safety Complex",
+        "description": "Drop box located between Municipal Court and Police Station; closer to police station entrance.",
+        "address": "361 New Brunswick Avenue Perth Amboy 08861",
+        "lat": 40.515425, 
+        "lng": -74.276969  
+      },
+      {
+        "title": "Piscataway",
+        "county": "Middlesex County",
+        "location": "Piscataway Municipal Complex",
+        "description": "Drop box located on walkway between municipal building and police station",
+        "address": "455 Hoes Lane Piscataway 08854",
+        "lat": 40.539422,
+        "lng": -74.470421  
+      },
+      {
+        "title": "Piscataway",
+        "county": "Middlesex County",
+        "location": "Westergard Library",
+        "description": "Drop box located in front of library.",
+        "address": "20 Murray Ave, Piscataway 08854",
+        "lat": 40.568720, 
+        "lng": -74.457302  
+      },
+      {
+        "title": "Plainsboro",
+        "county": "Middlesex County",
+        "location": "Plainsboro Municipal Complex",
+        "description": "Drop box located in front of stairs to Municipal Building ",
+        "address": "641 Plainsboro Road Plainsboro 08856",
+        "lat": 40.333734,
+        "lng": -74.586729  
+      },
+      {
+        "title": "Sayreville ",
+        "county": "Middlesex County",
+        "location": "Sayreville Borough Hall",
+        "description": "Drop box located behind building, on the sidewalk (right side when facing the building)",
+        "address": "167 Main Street Sayreville 08872",
+        "lat": 40.464066, 
+        "lng": -74.361820  
+      },
+      {
+        "title": "South Amboy ",
+        "county": "Middlesex County",
+        "location": "South Amboy Train Station",
+        "description": "On the curb in front of the train station across from townhall",
+        "address": "137 N. Broadway South Amboy 08879",
+        "lat": 40.484704, 
+        "lng": -74.280988  
+      },
+      {
+        "title": "South Brunswick",
+        "county": "Middlesex County",
+        "location": "South Brunswick Municipal Building",
+        "description": "In front of main building to the right of visitor parking",
+        "address": "540 Ridge Road South Brunswick 08852",
+        "lat": 40.382624, 
+        "lng": -74.533496  
+      },
+      {
+        "title": "South Brunswick",
+        "county": "Middlesex County",
+        "location": "South Brunswick Community Center (Woodlot Park)",
+        "description": "Drop box located at walkway to front entrance.",
+        "address": "124 New Road, Monmouth Junction South Brunswick 08852",
+        "lat":  40.404062,  
+        "lng": -74.563311
+      },
+      {
+        "title": "South Plainfield",
+        "county": "Middlesex County",
+        "location": "South Plainfield Borough Hall",
+        "description": "Rear of municipal building",
+        "address": "2480 Plainfield Avenue South Plainfield 07080",
+        "lat": 40.583798, 
+        "lng": -74.416440
+      },
+      {
+        "title": "South River",
+        "county": "Middlesex County",
+        "location": "South River Administration Building",
+        "description": "In front of administration building",
+        "address": "48 Washington Street South River 08882",
+        "lat": 40.449538, 
+        "lng": -74.381354
+      },
+      {
+        "title": "Spotswood",
+        "county": "Middlesex County",
+        "location": "Spotswood Municipal Building",
+        "description": "In front of townhall",
+        "address": "77 Summerhill Road Spotswood 08884",
+        "lat": 40.398735, 
+        "lng": -74.387088
+      },
+      {
+        "title": "Woodbridge",
+        "county": "Middlesex County",
+        "location": "Woodbridge Municipal Building",
+        "description": "Drop Box is curbside. Adjacent to north side of main entrance stairs to town hall",
+        "address": "1 Main Street Woodbridge 07095",
+        "lat": 40.555177, 
+        "lng": -74.275971
+      }                                             
     ]
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
