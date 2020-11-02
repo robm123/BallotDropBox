@@ -1,273 +1,677 @@
 
+//var icon = "http://path/to/icon.png"; possibly style icon
+var json = "DropBoxLocations.json";
+
+var origin;
+var destination;
+var encodedOrigin;
+
+var encodedLink;
+var lat;
+var lng ;
+let autocomplete;
+var inputAddress;
+
+let infowindow;
+let map;
+
+var dropBoxList = [];
+let dropBox= {};
+var address;
+let addressMarker;
+
+let dropBoxMarkers = [];
+let pollingLocationMarkers = [];
+let earlyVotingMarkers = [];
+
+var civicInfoKey = config.CIVIC_INFO_API_KEY;
+
+
 function reloadThePage()
 {
   location.reload();
 }
 
-var map;
-//var icon = "http://path/to/icon.png"; possibly style icon
-var json = "DropBoxLocations.json";
-var infowindow;
-var origin;
-var destination;
-var encodedOrigin;
-var encodedDestination;
-var encodedLink;
-var lat;
-var lng ;
-let autocomplete;
 
 function initAutocomplete() {
-  const map = new google.maps.Map(document.getElementById("map"), {
+
+  var myStyles =[
+      {
+          featureType: "poi.business",
+          elementType: "labels",
+          stylers: [
+                { visibility: "off" }
+          ]
+      }
+  ];
+  
+  map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: 38.916691, lng: -77.035373 }, 
     zoom: 9,
     mapTypeId: "roadmap",
+    clickableIcons: false,
+    styles: myStyles,
   });
-
-  origin = document.getElementById("pac-input").value;
-  var infowindow = new google.maps.InfoWindow();
-
-
-  //reads in data from JSON file
-  $.getJSON(json, function(json1) {
-    $.each(json1.DropBoxes, function(key, data){
   
-      var latLng = new google.maps.LatLng(data.lat, data.lng);
-      var marker = new google.maps.Marker({
-        position: latLng,
-        map: map,
-        // icon: icon,
-        title: data.title
-      });
+  infowindow = new google.maps.InfoWindow();
 
-      encodedDestination = data.lat + "%2c" + data.lng;
-      var details = data.title + ", " + data.county + "<br>" + data.location + "<br>" + data.description;
-      var addr = data.address;
-      bindInfoWindow(marker, map, infowindow, details, encodedDestination,addr);
-    });
-  }); 
-  
-  //-----
+  addressMarker = new google.maps.Marker({map});
 
-
-  origin = document.getElementById("pac-input").value;
-  // Create the search box and link it to the UI element.
+    // Create the search box and link it to the UI element.
   const input = document.getElementById("pac-input");
-  
+ 
   var options = {
     types: ['address'],
     componentRestrictions: {country: ["us"]}
   };
-  
 
-  //create the autocomplete object and specity waht we return
-  //as you can see from above i only want it to return U.S> based addresses
   autocomplete = new google.maps.places.Autocomplete(input,options);
-  //autocomplete.setComponentRestrictions({'country': ['us']});
-
-  //i think this is redundant, im setting the which actual feilds to return.
-  //the address components is an object that returns all address info such as street number., county,neigborhood, state, etc
-  //geomtry is like a place such as chichago, illionis , southside chicago, parlin(its not a townn but a distrcit/neihgborhood i think), NJ
   autocomplete.setFields(["address_components", "geometry","formatted_address"]);
- 
-  //const infowindow = new google.maps.InfoWindow();
- 
- //may remove , might be to cluttery
- //this is a pop showing the address on the pin the user typed
-  const infowindowContent = document.getElementById("infowindow-content");
-  infowindow.setContent(infowindowContent);
+  pressedEnterKey(input);
+  autocomplete.addListener("place_changed", onPlaceChanged);
+}
   
- 
-  const marker = new google.maps.Marker({
-    map,
-    anchorPoint: new google.maps.Point(0, -29),
-  });
+/*  there will most likely be geometry found but
+    the civic info api NEEDS A FULL ADDRESS to work
+*/
+async function onPlaceChanged() {
+  
+  //close info window- clear markers
+  let msg;
+  infowindow.close();
+  clearMarkers();
+  addressMarker.setVisible(false);
+  const place = autocomplete.getPlace();
 
-  //this is where the magic happens place = autocomplete.getplace() returns an json object thing
-  //it contains alot of info pertaining to the address the user selected. im having trouble finding an exmaple fromthe documentaton
-  //it contains nested objects and nested arrays of info
-  //
-  //
-  autocomplete.addListener("place_changed", () => {
-    infowindow.close();
-    marker.setVisible(false);
-    const place = autocomplete.getPlace();
+  console.log("place");
+  console.log(place);
 
-    var p = place.formatted_address;
+  //debugger;############################
+  let address = place.formatted_address;
+  let results = await lookup(address);
+  console.log("JSON response variables");
+  console.log(Object.getOwnPropertyNames(results));
 
-    var o;
-    var xx;
+  let properties = Object.getOwnPropertyNames(results);
 
-    // you can see whtat its returnin in the conosle 
-    for(var i = 0; i < place.address_components.length; i++){
-      o = place.address_components[i].types[0];
-      xx = place.address_components[i].long_name;
-      console.log(">>>>>" + o + "  " + xx);
-    }
+  //move page down 
+  var elmnt = document.getElementById("copyright");
+  elmnt.scrollIntoView();
 
-    //lookup('41 southwood dr. old bridge NJ', renderResults);
-    //console.log("--->" + place.address_components[0]);
+  if (!place.geometry) {
+    msg = "Please select a complete address from the list"
+    window.alert(msg);
 
-    if (!place.geometry) {
-      // User entered the name of a Place that was not suggested and
-      // pressed the Enter key, or the Place Details request failed.
-      window.alert("No details available for input: '" + place.name + "'");
-      return;
-    }
-    // If the place has a geometry, then present it on a map.
-    if (place.geometry.viewport) {
-      map.fitBounds(place.geometry.viewport);
-    } else {
-      map.setCenter(place.geometry.location);
-      map.setZoom(17); // Why 17? Because it looks good.
-    }
-    marker.setPosition(place.geometry.location);
-    marker.setVisible(true);
-    marker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-pushpin.png')
+  } else if (place.geometry && !('dropOffLocations' in results) && !('earlyVoteSites' in results) && !('pollingLocations' in results)) {
     
-    let address = "";
-    if (place.address_components) {
-      address = [
-        (place.address_components[0] &&
-          place.address_components[0].short_name) ||
-          "",
-        (place.address_components[1] &&
-          place.address_components[1].short_name) ||
-          "",
-        (place.address_components[2] &&
-          place.address_components[2].short_name) ||
-          "",
-      ].join(" ");
-    }
+    map.panTo(place.geometry.location);
+    map.setZoom(12);
+    addressMarker.setPosition(place.geometry.location);
+    addressMarker.setVisible(true);
+    addressMarker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-pushpin.png');
+    msg = "Unforunately your location does not contain any informaiton\nPlease check back later"; 
+    setTimeout(function() { alert(msg); }, 700);
 
-    console.log("address: " + address);
+    //debugger;
+  } else {
+    console.log("ENTERED");
+    map.panTo(place.geometry.location);
+    map.setZoom(12);
 
-    //infowindowContent.children["place-icon"].src = place.icon;
-    //infowindowContent.children["place-name"].textContent = place.name;
-    //const place = autocomplete.getPlace();
+    //creates a pin from  users address input
+    //const addressMarker = new google.maps.Marker({map});
+    addressMarker.setPosition(place.geometry.location);
+    addressMarker.setVisible(true);
+    addressMarker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-pushpin.png');
 
-    // i was trying to figure out what it was returning
-    //the JSON it returned was difficult to understand because i didnt know the actual keys
-    //i couldnt find it in the documentation
-    var streetNumber = place.address_components[0].long_name;
-    var streetName = place.address_components[1].long_name;
-    var town = place.address_components[2].long_name; 
-    var state = place.address_components[5].long_name;
-    var str = streetNumber + " " + streetName + " " + town + "," + state;
-    encodedOrigin = encodeURIComponent(str);
-    // broken--- new user address doesnt visually update
-    //infowindowContent.children["place-address"].textContent = address;
-    //infowindow.open(map, marker);
-  });
-  google.maps.event.addDomListener(window, 'load', initAutocomplete);
+    search(place,results);
+    //search for drop boxes near the address 
+    //###############1########################
+    //return;
+
+  }
+
+
+} 
+
+async function search(address,results) {
+  //clear markers
+  //populate marker object
+  //listener for click on marker
+
+  //may not always recieve a JSON object, see lookup(address)
+  //check status 
+  
+  let usersAddress = address;
+
+
+
+  
+
+  
+  
+  //##############2#############################
+  let dropBoxLocations = findDropBoxLocations(results);
+  displayDropBoxes(dropBoxLocations,usersAddress);
+
+
+  
+
+  console.log("response")
+  console.log(results);
+  //console.log("drop box list Array");
+  //console.log(dropBoxList);
+
+  let pollingLocations = await findPollingLocations(results);
+  displayPollingLocations(pollingLocations, usersAddress);
+
+
+  //##MUST CLEAR MARKERS! arrays etc 
+  let earlyVotingLocations = findEarlyVoteLocations(results);
+  displayEarlyVoting(earlyVotingLocations,usersAddress);
+
+  //check if it returned an empty array!!
+
+
 }
 
-function bindInfoWindow(marker, map, infowindow, strDescription, strDestination,address) {
-  var link;
-  var information;
-   
-  //this is for the pop up window when u click on the pin 
+function bindInfoWindow(marker, map, infowindow, details, destination,address,origin) {
+  let link;
+  let information;
+  let encodedOrigin; 
+
   google.maps.event.addListener(marker, 'click', function() {
-    link = "https://www.google.com/maps/dir/?api=1&origin=" + encodedOrigin + "&destination=" + strDestination + "&travelmode=driving";
-    information = strDescription + "<br>" + "<a target='_blank' href='"+ link +"' >"+ address +"</a>" + "<br>";
+    
+    link = "https://www.google.com/maps/dir/?api=1&origin=" + origin + "&destination=" + destination + "&travelmode=driving";
+    information = details + "<br>" + "<a target='_blank' href='"+ link +"' >"+ address +"</a>" + "<br>";
     infowindow.setContent(information);
     infowindow.open(map, marker);
   });
 }
 
-// so what im doing here is calling that civic info api 
-// im not done yet but im trying to build my own api from this function that will happen later 
-// with using ur crawler to populate the gaps
-// that api key is for the civic info api
-//
-//
-/////////Functions to create dropbox location data set//////////////////////////////
-/**
- * Initialize the API client and make a request.
- */
-function load() {
-  console.log("herrr")
-  gapi.client.setApiKey('AIzaSyCR7YFB3ozjPmlWLNdy0dI09qUXeniY2Ew');
-  //lookup(origin, renderResults);
+function clearMarkers() {
+  //clears dropbox markers
+  for (let i = 0; i < dropBoxMarkers.length; i++) {
+    if (dropBoxMarkers[i]) {
+      dropBoxMarkers[i].setMap(null);
+    }
+  }
+  dropBoxMarkers = [];
+  //clears polling location markers
+  for (let i = 0; i < pollingLocationMarkers.length; i++) {
+    if (pollingLocationMarkers[i]) {
+      pollingLocationMarkers[i].setMap(null);
+    }
+  }
+  pollingLocationMarkers = [];
+
+  for (let i = 0; i < earlyVotingMarkers.length; i++) {
+    if (earlyVotingMarkers[i]) {
+      earlyVotingMarkers[i].setMap(null);
+    }
+  }
+  earlyVotingMarkers = [];
 }
 
-/**
- * Build and execute request to look up voter info for provided address.
- * @param {string} address Address for which to fetch voter info.
- * @param {function(Object)} callback Function which takes the
- *     response object as a parameter.
- */
- function lookup(address, callback) {
- /**
-   * Election ID for which to fetch voter info.
-   * @type {number}
-   */
-  var electionId = 7000;
+function showInfoWindow(){
+  var link;
+  var information;
+  //const marker = this;
+  const marker = this;
+  //encodedOrigin = encodeURIComponent(address);
+  //link = "https://www.google.com/maps/dir/?api=1&origin=" + encodedOrigin + "&destination=" + strDestination + "&travelmode=driving";
+  //information = details + "<br>" + "<a target='_blank' href='"+ link +"' >"+ address +"</a>" + "<br>";
+  
+  //infowindow.setContent(information);
+  infowindow.open(map, marker);
 
-  /**
-   * Request object for given parameters.
-   * @type {gapi.client.HttpRequest}
-   */
-  var req = gapi.client.request({
-      'path' : '/civicinfo/v2/voterinfo',
-      'params' : {'electionId' : electionId, 'address' : address}
-  });
+}
 
-  req.execute(callback);
-} 
+function load(){
+  gapi.client.setApiKey(civicInfoKey);
+}
 
-/**
- * Render results in the DOM.
- * @param {Object} response Response object returned by the API.
- * @param {Object} rawResponse Raw response from the API.
- */
-function renderResults(response, rawResponse) {
+//return new Promise((resolve, reject) => {
+//})
+  
+async function lookup(address) {
+  return new Promise((resolve, reject) => {
+      let results;
+      let electionID = 7000;
+      let encodedAddress = encodeURIComponent(address);
+      let url = 'https://content.googleapis.com/civicinfo/v2/voterinfo?'
+                + 'electionId=' + electionID
+                + '&address=' + encodedAddress
+                + '&key=' + civicInfoKey;
+      //it may not always return a proper response
+      //must verify response is ok....
+      fetch(url)
+        .then(res => res.json())
+        .then(response => resolve(response));
   /*
-  var el = document.getElementById('results');
-  if (!response || response.error) {
-    el.appendChild(document.createTextNode(
-        'Error while trying to fetch polling place'));
-    return;
-  }*/
-
-  if(!response || response.error) {
-    window.alert("Error while trying to fetch polling place");
-  }
-  //response.earlyVoteSites
-  //response.dropOffLocations
-  //response.pollingLocations
-
-  'dropOffLocations' in response  ? console.log('yay detected') : console.log('nope not found')
-
-  console.log(response.dropOffLocations[0].address.locationName);
-
-  var dropBoxList = [];
-  var dropBox= {};
-
-  for(var i in response.dropOffLocations){
-    
-    var item = response.dropOffLocations[i];
-
-    dropBoxList.push({
-      "type" : "DropBox",
-      "location" : item.address.locationName,
-      "address" : item.address.line1,
-      "city" : item.address.city,
-      "state" : item.address.state,
-      "zip" : item.address.zip,
-      "latitude" : item.latitude,
-      "longitude" : item.longitude,
-      "description" : item.notes,
-      "hours" : item.pollingHours 
+    console.log("inside lookup");
+    var electionId = 7000;
+    var req = gapi.client.request({
+        'path' : '/civicinfo/v2/voterinfo',
+        'params' : {'electionId' : electionId, 'address' : address}
     });
+    console.log("before callback");
+    await req.execute(callback);
+    console.log("after callback");
+    //console.log(results);
+  */
+  })
+}
+
+
+function findDropBoxLocations(response) {
+  //create my own dataset;possibly create own API then fill in blank with web crawler
+  let dropBoxLocations = [];
+
+  if('dropOffLocations' in response){
+    for(let i = 0;i < response.dropOffLocations.length;i++){
+      
+      let item = response.dropOffLocations[i];
+
+      let addressComponent  = item.address;
+
+      let location = getKeyValue(addressComponent,'locationName');
+      let address = getKeyValue(addressComponent,'line1');
+      let city = getKeyValue(addressComponent,'city');
+      let county = getCounty(response);
+      let state = getKeyValue(addressComponent,'state');
+      let zip = getKeyValue(addressComponent,'zip');
+      //check if LAT AND LNG FOUND IF NOT THEN GEOCODE
+      let latitude = getKeyValue(item, 'latitude');
+      let longitude = getKeyValue(item,'longitude');
+      let description = getKeyValue(item,'notes');
+      let hours = getKeyValue(item, 'pollingHours');
+
+      //verify that response contains the data your looking for. SOME DATA IS MISSING!!!!!!!!
+      //'notes' in results.dropOffLocations[i] ? notes = item.notes: notes = "no info yet"; 
+
+      dropBoxLocations.push({
+        "type" : "Drop Box",
+        "location" : location,
+        "street" : address,
+        "city" : city,
+        "county" : county,
+        "state" : state,
+        "zip" : zip,
+        "latitude" : latitude,
+        "longitude" : longitude,
+        "description" : description,
+        "hours" : hours 
+      })
+    }
+    return dropBoxLocations;
+  } else {
+      //returns empty array if no drop box locations found
+      return dropBoxLocations;
+    }
+}
+
+function findEarlyVoteLocations(response) {
+
+  let earlyVotingLocations = [];
+
+  if('earlyVoteSites' in response){
+    
+    for(let i = 0;i < response.earlyVoteSites.length;i++) {
+
+      let item = response.earlyVoteSites[i];
+      let addressComponent = item.address;
+      let location = getKeyValue(addressComponent,'locationName');
+      let address = getKeyValue(addressComponent,'line1');
+      let city = getKeyValue(addressComponent,'city');
+      let county = getCounty(response);
+      let state = getKeyValue(addressComponent,'state');
+      let zip = getKeyValue(addressComponent,'zip');
+      //CHECK TO SEE IF LAT && LNG FOUND OR MUST GEOCODE #############################
+      let latitude = getKeyValue(item, 'latitude');
+      let longitude = getKeyValue(item,'longitude');
+      //DOES NOT CONTAIN A notes KEY.. description : "NotApplicable"###################
+      let description = getKeyValue(item,'notes');
+      let hours = getKeyValue(item, 'pollingHours');
+
+      earlyVotingLocations.push({
+        "type" : "Early Voting Site",
+        "location" : location,
+        "street" : address,
+        "city" : city,
+        "state" : state,
+        "zip" : zip,
+        "county" : county,
+        "latitude" : latitude,
+        "longitude" : longitude,
+        "description" : description,
+        "start" : item.startDate,
+        "end" : item.endDate,
+        "hours" : item.pollingHours
+      })
+    }
+    return earlyVotingLocations;
   }
-  console.log(dropBoxList);
-  //---------end of civic info api------------
+  else{
+    //no info found
+    /*
+    let msg = "NotApplicable";
+    earlyVotingLocations.push({
+      "type" : "Early Voting Site",
+      "location" : msg,
+      "street" : msg,
+      "city" : msg,
+      "state" : msg,
+      "zip" : msg,
+      "county" : msg,
+      "latitude" : msg,
+      "longitude" : msg,
+      "start" : msg,
+      "end" : msg,
+      "hours" : msg
+    })
+    */
+    //returns an empty array if nothing found
+    return earlyVotingLocations;
+  }
+}
+
+async function findPollingLocations(response) {
+
+  let pollingLocations = [];
+
+  if('pollingLocations' in response) {
+
+    for(let i = 0;i < response.pollingLocations.length;i++) {
+
+      let item = response.pollingLocations[i];
+      let addressComponent = item.address;
+      let location = getKeyValue(addressComponent,'locationName');
+      let address = getKeyValue(addressComponent,'line1');
+      let city = getKeyValue(addressComponent,'city');
+      let county = getCounty(response);
+      let state = getKeyValue(addressComponent,'state');
+      let zip = getKeyValue(addressComponent,'zip');
+      let latitude = getKeyValue(item, 'latitude');
+      let longitude = getKeyValue(item,'longitude');
+      let description = getKeyValue(item,'notes');
+      let hours = getKeyValue(item, 'pollingHours');
+
+      //find out if polling locations and drop boxes are in the exact same position
+      //if true then it adjusts the polling location
+      //!('latitude' in item && 'longitude' in item)
+      if(latitude == "NotApplicable" && longitude == "NotApplicable") {
+        //this will be using a fetch call, and waits for the response
+        //the reponse will not always be 200, MUST IMPLEMENT different response handling
+        let address = item.address.line1 + " " + item.address.city + ", " + item.address.state;
+        let geoCodeRespose = await getGeoCode(address);
+        console.log("Geocode Response");
+        console.log(geoCodeRespose)
+        latitude = geoCodeRespose.results[0].geometry.location.lat;
+        longitude = geoCodeRespose.results[0].geometry.location.lng;
+
+
+
+        async function getGeoCode(address){
+          return new Promise((resolve, reject) => {
+            let encodedAddress = encodeURIComponent(address);
+            let url = 'https://maps.googleapis.com/maps/api/geocode/json?'
+                      + 'address=' + encodedAddress
+                      + '&key=AIzaSyAl7ZldzhZeDOnPjJEIPlevPebXJOd0DRA';
+          
+            fetch(url)
+              .then(res => res.json())
+              .then(response => resolve(response));
+          })
+        }
+      }
+
+      pollingLocations.push({
+        "type" : "Polling Location",
+        "location" : location,
+        "street" : address,
+        "city" : city,
+        "state" : state,
+        "zip" : zip,
+        "county" : county,
+        "latitude" : latitude,
+        "longitude" : longitude,
+        "description" : description,
+        "hours" : hours
+      })
+    }
+    return pollingLocations;
+  }
+  else{
+    //no Polling locations found
+    /*
+    let msg = "NotApplicable";
+    pollingLocations.push({
+      "type" : "Polling Location",
+      "location" : msg,
+      "street" : msg,
+      "city" : msg,
+      "state" : msg,
+      "zip" : msg,
+      "county" : msg,
+      "latitude" : msg,
+      "longitude" : msg,
+      "hours" : msg
+    })
+    */
+    //returns an empty array if no polling locations found
+    return pollingLocations;
+  }
+}
+
+function displayDropBoxes(dropBoxLocations,origin) {
+
+    let list = dropBoxLocations;
+
+    let encodedDestination;
+    let encodedOrigin;
+    let details;
+    let address;
+
+
+    for(var i = 0; i < list.length;i++) {
+      var latLng = new google.maps.LatLng(list[i].latitude, list[i].longitude);
+      dropBoxMarkers[i] = new google.maps.Marker({
+          position: latLng,
+          map : map
+      });
+      let description = list[i].description;
+      //remove info before the first ; => drop box open date 
+      //let desc = description.substring(description.indexOf(";") + 1);
+      encodedOrigin = encodeURIComponent(origin);
+      encodedDestination = list[i].latitude + "%2c" + list[i].longitude;
+      details = list[i].type + "<br>" + list[i].county + "<br>" + list[i].location + "<br>" + description;
+      address = list[i].street + " " + list[i].city + ", " + list[i].state ;
+      //google.maps.event.addListener(markers[i], "click", showInfoWindow);
+      bindInfoWindow(dropBoxMarkers[i], map, infowindow, details, encodedDestination,address,encodedOrigin);  
+    }
+}
+
+function displayEarlyVoting(earlyVotingLocations,origin) {
+
+  let list = earlyVotingLocations;
+
+  let encodedDestination;
+  let encodedOrigin;
+  let details;
+  let address;
+
+  for(var i = 0; i < list.length;i++) {
+    
+    let lat = list[i].latitude;
+    let lng = list[i].longitude;
+    var latLng = new google.maps.LatLng(lat,lng);
+
+    //check position against dropboxes
+    for(let j = 0; j < dropBoxMarkers.length; j++) {
+
+      //check against polling location markers
+      //if markers are the exact positon it adjusts it a bit to prevent overlapping
+      for(let k = 0; k < pollingLocationMarkers.length; k++) {
+        
+        let poll = pollingLocationMarkers[k];
+        let position = poll.getPosition();
+
+        if(latLng.equals(position)) {
+          let newLat = lat + (0.2 -.3) / 1500;
+          let newLng = lng + (0.2 -.4) / 1500;
+          latLng = new google.maps.LatLng(newLat, newLng);
+        }
+      } 
+      let box = dropBoxMarkers[j];
+      let position = box.getPosition();
+
+      if(latLng.equals(position)) {
+        let newLat = lat + (0.2 -.3) / 1500;
+        let newLng = lng + (0.2 -.4) / 1500;
+        latLng = new google.maps.LatLng(newLat, newLng);
+      }
+    }
+
+    earlyVotingMarkers[i] = new google.maps.Marker({
+        position: latLng,
+        map : map,
+        icon: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
+    });
+    
+    //########pollingLocations has no description key############
+   //let description = list[i].description;
+   //############ remove before ; not important at the moment 
+   //remove info before the first ; => drop box open date 
+   //let desc = description.substring(description.indexOf(";") + 1);
+    encodedOrigin = encodeURIComponent(origin);
+    encodedDestination = list[i].latitude + "%2c" + list[i].longitude;
+    details = list[i].type + "<br>" + list[i].county + "<br>" + list[i].location + "<br>" + list[i].hours;
+    address = list[i].street + " " + list[i].city + ", " + list[i].state;
+    //google.maps.event.addListener(markers[i], "click", showInfoWindow);
+    bindInfoWindow(earlyVotingMarkers[i], map, infowindow, details, encodedDestination,address,encodedOrigin);  
+  }
+}
+
+function displayPollingLocations(pollingLocations, origin) {
+  //console.log("hello");
+  let list = pollingLocations;
+
+  let encodedDestination;
+  let encodedOrigin;
+  let details;
+  let address;
+  //console.log(list.length);
+  for(let i = 0; i < list.length;i++) {
+    
+    let lat = list[i].latitude;
+    let lng = list[i].longitude;
+    let latLng = new google.maps.LatLng(lat,lng);
+    //console.log(latLng);
+    //console.log(earlyVotingMarkers.length);
+    //console.log("bye");
+
+    //check against drop box locations
+    for(let j = 0; j < dropBoxMarkers.length; j++) {
+
+      let box = dropBoxMarkers[j];
+      let position = box.getPosition();
+
+      if(latLng.equals(position)) {
+        let newLat = lat + (0.3 -.3) / 1500;
+        let newLng = lng + (0.0 +.3) / 1500;
+        latLng = new google.maps.LatLng(newLat, newLng);
+      }
+    }
+
+    pollingLocationMarkers[i] = new google.maps.Marker({
+        position: latLng,
+        map : map,
+        icon: 'http://maps.google.com/mapfiles/ms/icons/pink-dot.png'
+    });
+    //########pollingLocations has no description key############
+   //let description = list[i].description;
+   //remove info before the first ; => drop box open date 
+   //let desc = description.substring(description.indexOf(";") + 1);
+    encodedOrigin = encodeURIComponent(origin);
+    encodedDestination = list[i].latitude + "%2c" + list[i].longitude;
+    details = list[i].type + "<br>" + list[i].county + "<br>" + list[i].location + "<br>" + list[i].hours;
+    address = list[i].street + " " + list[i].city + ", " + list[i].state ;
+
+    //google.maps.event.addListener(markers[i], "click", showInfoWindow);
+    bindInfoWindow(pollingLocationMarkers[i], map, infowindow, details, encodedDestination,address,encodedOrigin);  
+  }
+
 }
 
 
 
+//check if keys exist in reponse
 
 
+function getKeyValue(component, key){
+    let value;
+    if(component.hasOwnProperty(key)){
+      value = component[key];
+      return value;
+    }else {
+      value = "NotApplicable";
+      //console.log("here" + value);
+      return value;
+    }
+}
+
+//SOMETIMES STATE DOES NOT HAVE COUNTY.....THEN GEOCODE THE LAT AND LNG TO GET COUNTY!!!!!!
+function getCounty(results) {
+  //## did the response change?? 
+  //## proper way to get county is this---- results.state[0].local_jurisdiction.name
+  //##
+  if(results.hasOwnProperty('state')) {
+    if(results.state[0].hasOwnProperty('local_jurisdiction')) {
+      if(results.state[0].local_jurisdiction.hasOwnProperty('name')) {
+        county = results.state[0].local_jurisdiction.name;
+        return county;
+      }
+      else {
+        county = "NotApplicable";
+        return county;
+      }
+    }
+    else {
+      county = "NotApplicable";
+      return county;
+    }  
+  }
+  else {
+    county = "NotApplicable"
+    return county;
+  }
+}
 
 
+function pressedEnterKey(input) {
+  /* Store original event listener */
+  const addEventListener = input.addEventListener;
+
+  const addEventListenerWrapper = (type, listener) => {
+    if (type === 'keydown') {
+      /* Store existing listener function */
+      const _listener = listener
+      listener = (event) => {
+        /* Simulate a 'down arrow' keypress if no address has been selected */
+        const suggestionSelected = document.getElementsByClassName('pac-item-selected').length
+        if (event.key === 'Enter' && !suggestionSelected) {
+          const e = new KeyboardEvent('keydown', { 
+            key: 'ArrowDown', 
+            code: 'ArrowDown', 
+            keyCode: 40, 
+          })
+          _listener.apply(input, [e])
+        }
+        _listener.apply(input, [event])
+      }
+    }
+    addEventListener.apply(input, [type, listener])
+  }
+  input.addEventListener = addEventListenerWrapper;
+}
