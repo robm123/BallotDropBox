@@ -24,9 +24,6 @@ let dropBoxMarkers = [];
 let pollingLocationMarkers = [];
 let earlyVotingMarkers = [];
 
-var civicInfoKey = config.CIVIC_INFO_API_KEY;
-
-
 function reloadThePage()
 {
   location.reload();
@@ -228,7 +225,7 @@ function showInfoWindow(){
 }
 
 function load(){
-  gapi.client.setApiKey(civicInfoKey);
+  gapi.client.setApiKey('AIzaSyCR7YFB3ozjPmlWLNdy0dI09qUXeniY2Ew');
 }
 
 //return new Promise((resolve, reject) => {
@@ -242,7 +239,7 @@ async function lookup(address) {
       let url = 'https://content.googleapis.com/civicinfo/v2/voterinfo?'
                 + 'electionId=' + electionID
                 + '&address=' + encodedAddress
-                + '&key=' + civicInfoKey;
+                + '&key=AIzaSyCR7YFB3ozjPmlWLNdy0dI09qUXeniY2Ew';
       //it may not always return a proper response
       //must verify response is ok....
       fetch(url)
