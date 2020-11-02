@@ -121,7 +121,7 @@ async function onPlaceChanged() {
     addressMarker.setVisible(true);
     addressMarker.setIcon('http://maps.google.com/mapfiles/ms/icons/blue-pushpin.png');
 
-    search(place,results);
+    search(address,results);
     //search for drop boxes near the address 
     //###############1########################
     //return;
